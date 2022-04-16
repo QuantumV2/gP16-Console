@@ -17,12 +17,14 @@ waitingtimerIPc = 0
 
 logo = love.graphics.newImage("consoleCrop.png",linear)
 cb = love.graphics.newImage("codeButtonBig.png",linear)
+drb = love.graphics.newImage("drawButton.png",linear)
+tb = love.graphics.newImage("tileButton.png",linear)
+sb = love.graphics.newImage("settingsButton.png",linear)
 
 font = love.graphics.newFont("prstart.ttf")
 
 local suit = require 'suit-master'
 local utf8 = require 'utf8'
-local sysSpecs = require 'specs'
 
 local function validate(input)
   local len = utf8.len(input.text)
@@ -91,15 +93,36 @@ function love.draw()
         lockIPcMsgLower = false
       end
     end
+    if suit.ImageButton(drb, 30+64, 500).hit then
+      if input.text ~= commands.help or input.text ~= commands.sP then
+        lockIPcMsg = false
+      else
+        lockIPcMsgLower = false
+      end
+    end
+    if suit.ImageButton(tb, 45+128, 500).hit then
+      if input.text ~= commands.help or input.text ~= commands.sP then
+        lockIPcMsg = false
+      else
+        lockIPcMsgLower = false
+      end
+    end
+    if suit.ImageButton(sb, 50+192, 500).hit then
+      if input.text ~= commands.help or input.text ~= commands.sP then
+        lockIPcMsg = false
+      else
+        lockIPcMsgLower = false
+      end
+    end
     if lockIPcMsg == false then
-      love.graphics.print("In-Programm coding is not supported in Micro!", 5, yTB+40)
+      love.graphics.print("This In-Programm feature is not supported in Micro!", 5, yTB+40)
       if waitingtimerIPc > 2 then
         lockIPcMsg = true
         waitingtimerIPc = 0
       end
     end
     if lockIPcMsgLower == false then
-      love.graphics.print("In-Programm coding is not supported in Micro!", 5, yTB+80)
+      love.graphics.print("This In-Programm feature is not supported in Micro!", 5, yTB+80)
       if waitingtimerIPc > 2 then
         lockIPcMsgLower = true
         waitingtimerIPc = 0
@@ -121,7 +144,3 @@ function commandOffset()
   yTB = yTB + 24
   input.text = ""
 end
-function drawPrev()
-  love.graphics.print("Insert cmd>" .. input.text, 5, yTB-24)
-end
-
