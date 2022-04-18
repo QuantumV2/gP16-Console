@@ -4,7 +4,7 @@ Welcome
 
 ## Header 2
 
-> This page is incomplete
+> This page is incomplete.
 >
 > Come again soon!
 
