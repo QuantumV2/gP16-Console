@@ -2,7 +2,7 @@
 Welcome
 ---
 
-## Header 2
+## About
 
 > This page is incomplete.
 >
