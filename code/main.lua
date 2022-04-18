@@ -14,12 +14,15 @@ lockIPcMsg = true
 lockIPcMsgLower = true
 waitingtimerIPc = 0
 
+settings = false
 
 logo = love.graphics.newImage("consoleCrop.png",linear)
 cb = love.graphics.newImage("codeButtonBig.png",linear)
 drb = love.graphics.newImage("drawButton.png",linear)
 tb = love.graphics.newImage("tileButton.png",linear)
 sb = love.graphics.newImage("settingsButton.png",linear)
+lb = love.graphics.newImage("lessButton.png",linear)
+mb = love.graphics.newImage("moreButton.png",linear)
 
 font = love.graphics.newFont("prstart.ttf")
 
@@ -30,7 +33,7 @@ local function validate(input)
   local len = utf8.len(input.text)
 
   -- allow only lowercase a-z (also no spaces, etc)
-  input.text = input.text:gsub("[^a-z]", "")
+  input.text = input.text:gsub("[^a-z]_.", "")
 
   -- reset cursor to where it was before charater removal
   input.cursor = input.cursor - (len - utf8.len(input.text))
@@ -69,7 +72,11 @@ end
 
 
 function love.draw()
-
+    if string.find(input.text, "load ") then
+      for i in string.gmatch(input.text, "code") do
+        require(i)
+      end
+    end
 
     if input.text == commands.help then
       love.graphics.print("gP16Micro -- Made by QuantumV 2022\nsysspecs -- Opens system specs", 5, yTB+40)
@@ -108,10 +115,10 @@ function love.draw()
       end
     end
     if suit.ImageButton(sb, 50+192, 500).hit then
-      if input.text ~= commands.help or input.text ~= commands.sP then
-        lockIPcMsg = false
-      else
-        lockIPcMsgLower = false
+      if settings == false then
+        settings = true
+      elseif settings == true then
+        settings = false
       end
     end
     if lockIPcMsg == false then
@@ -126,6 +133,39 @@ function love.draw()
       if waitingtimerIPc > 2 then
         lockIPcMsgLower = true
         waitingtimerIPc = 0
+      end
+    end
+    if settings == true then
+      if suit.ImageButton(mb, 750, 55).hit then
+        colors = colors + 1
+        colorsPerSprite = colorsPerSprite - 1
+        maxSprites = maxSprites - 1
+      end
+      love.graphics.print("" .. colors, 750-28, 62)
+      if suit.ImageButton(lb, 750-64, 55).hit then
+        if colors ~= 1 then
+          colors = colors - 1
+          colorsPerSprite = colorsPerSprite + 1
+          maxSprites = maxSprites + 1
+        end
+      end
+      if suit.ImageButton(mb, 750, 105).hit then
+        colorsPerSprite = colorsPerSprite + 1
+      end
+      love.graphics.print("" .. colorsPerSprite, 750-28, 110)
+      if suit.ImageButton(lb, 750-64, 105).hit then
+        if colorsPerSprite ~= 1 then
+          colorsPerSprite = colorsPerSprite - 1
+        end
+      end
+      if suit.ImageButton(mb, 750, 155).hit then
+        maxSprites = maxSprites + 1
+      end
+      love.graphics.print("" .. maxSprites, 750-28, 160)
+      if suit.ImageButton(lb, 750-64, 155).hit then
+        if maxSprites ~= 1 then
+          maxSprites = maxSprites - 1
+        end
       end
     end
     --love.graphics.rectangle("fill", 10,470, 780,120, 10, 10)
